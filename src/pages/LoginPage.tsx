@@ -9,8 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dumbbell } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<string>("login");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -73,16 +75,16 @@ const LoginPage = () => {
           <div className="flex items-center justify-center mb-3">
             <Dumbbell className="h-12 w-12 text-app-red" />
           </div>
-          <h1 className="text-3xl font-heading font-bold">Shape Shift Genie</h1>
-          <p className="mt-2 text-muted-foreground">AI-powered fitness and diet planner</p>
+          <h1 className="text-3xl font-heading font-bold">{t('app.name')}</h1>
+          <p className="mt-2 text-muted-foreground">{t('app.tagline')}</p>
         </div>
 
         <Card className="border border-border bg-card shadow-lg animate-slide-in">
           <CardHeader>
             <Tabs defaultValue="login" onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
+                <TabsTrigger value="login">{t('auth.login')}</TabsTrigger>
+                <TabsTrigger value="register">{t('auth.register')}</TabsTrigger>
               </TabsList>
             </Tabs>
           </CardHeader>
@@ -91,11 +93,11 @@ const LoginPage = () => {
             {activeTab === "login" ? (
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t('auth.email')}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="seu@email.com"
                     className="input-field"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -103,7 +105,7 @@ const LoginPage = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('auth.password')}</Label>
                   <Input
                     id="password"
                     type="password"
@@ -114,16 +116,16 @@ const LoginPage = () => {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full workout-highlight">Login</Button>
+                <Button type="submit" className="w-full workout-highlight">{t('auth.login')}</Button>
               </form>
             ) : (
               <form onSubmit={handleRegister} className="space-y-4">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name">{t('auth.name')}</Label>
                     <Input
                       id="name"
-                      placeholder="Your Name"
+                      placeholder="Seu Nome"
                       className="input-field"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -132,11 +134,11 @@ const LoginPage = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t('auth.email')}</Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder="seu@email.com"
                       className="input-field"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -145,7 +147,7 @@ const LoginPage = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t('auth.password')}</Label>
                     <Input
                       id="password"
                       type="password"
@@ -159,7 +161,7 @@ const LoginPage = () => {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="weight">Weight (kg)</Label>
+                      <Label htmlFor="weight">{t('auth.weight')}</Label>
                       <Input
                         id="weight"
                         placeholder="70"
@@ -170,7 +172,7 @@ const LoginPage = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="height">Height (cm)</Label>
+                      <Label htmlFor="height">{t('auth.height')}</Label>
                       <Input
                         id="height"
                         placeholder="175"
@@ -184,7 +186,7 @@ const LoginPage = () => {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="age">Age</Label>
+                      <Label htmlFor="age">{t('auth.age')}</Label>
                       <Input
                         id="age"
                         placeholder="30"
@@ -195,57 +197,59 @@ const LoginPage = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="gender">Gender</Label>
+                      <Label htmlFor="gender">{t('auth.gender.label')}</Label>
                       <Select value={gender} onValueChange={setGender}>
                         <SelectTrigger id="gender" className="input-field">
-                          <SelectValue placeholder="Select Gender" />
+                          <SelectValue placeholder={t('auth.gender.label')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                          <SelectItem value="male">{t('auth.gender.male')}</SelectItem>
+                          <SelectItem value="female">{t('auth.gender.female')}</SelectItem>
+                          <SelectItem value="other">{t('auth.gender.other')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="fitnessGoal">Fitness Goal</Label>
+                    <Label htmlFor="fitnessGoal">{t('auth.fitnessGoal.label')}</Label>
                     <Select value={fitnessGoal} onValueChange={setFitnessGoal}>
                       <SelectTrigger id="fitnessGoal" className="input-field">
-                        <SelectValue placeholder="Select Goal" />
+                        <SelectValue placeholder={t('auth.fitnessGoal.label')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="lose">Lose Weight</SelectItem>
-                        <SelectItem value="maintain">Maintain Weight</SelectItem>
-                        <SelectItem value="gain">Gain Weight</SelectItem>
+                        <SelectItem value="lose">{t('auth.fitnessGoal.lose')}</SelectItem>
+                        <SelectItem value="maintain">{t('auth.fitnessGoal.maintain')}</SelectItem>
+                        <SelectItem value="gain">{t('auth.fitnessGoal.gain')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="workoutFrequency">Workouts Per Week</Label>
+                    <Label htmlFor="workoutFrequency">{t('auth.workoutFrequency.label')}</Label>
                     <Select value={workoutFrequency} onValueChange={setWorkoutFrequency}>
                       <SelectTrigger id="workoutFrequency" className="input-field">
-                        <SelectValue placeholder="Select Frequency" />
+                        <SelectValue placeholder={t('auth.workoutFrequency.label')} />
                       </SelectTrigger>
                       <SelectContent>
                         {[1, 2, 3, 4, 5, 6, 7].map(num => (
-                          <SelectItem key={num} value={num.toString()}>{num} {num === 1 ? 'day' : 'days'}</SelectItem>
+                          <SelectItem key={num} value={num.toString()}>
+                            {num} {num === 1 ? t('auth.workoutFrequency.day') : t('auth.workoutFrequency.days')}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
                 
-                <Button type="submit" className="w-full workout-highlight">Register</Button>
+                <Button type="submit" className="w-full workout-highlight">{t('auth.register')}</Button>
               </form>
             )}
           </CardContent>
         </Card>
         
         <p className="text-center text-sm text-muted-foreground">
-          AI-generated recommendations don't replace qualified professionals.
+          {t('auth.disclaimer')}
         </p>
       </div>
     </div>

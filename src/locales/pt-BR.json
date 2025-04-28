@@ -1,0 +1,110 @@
+
+{
+  "app": {
+    "name": "Training",
+    "tagline": "Assistente de fitness com IA"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "back": "Voltar",
+    "next": "Próximo",
+    "submit": "Enviar",
+    "logout": "Sair"
+  },
+  "auth": {
+    "login": "Entrar",
+    "register": "Registrar",
+    "email": "Email",
+    "password": "Senha",
+    "name": "Nome",
+    "weight": "Peso (kg)",
+    "height": "Altura (cm)",
+    "age": "Idade",
+    "gender": {
+      "label": "Sexo",
+      "male": "Masculino",
+      "female": "Feminino",
+      "other": "Outro"
+    },
+    "fitnessGoal": {
+      "label": "Objetivo Fitness",
+      "lose": "Perder Peso",
+      "maintain": "Manter Peso",
+      "gain": "Ganhar Peso"
+    },
+    "workoutFrequency": {
+      "label": "Treinos Por Semana",
+      "day": "dia",
+      "days": "dias"
+    },
+    "loginForm": "Acessar Conta",
+    "registerForm": "Criar Conta",
+    "disclaimer": "Recomendações geradas por IA não substituem profissionais qualificados."
+  },
+  "dashboard": {
+    "greeting": "Olá",
+    "stats": {
+      "title": "Suas Estatísticas",
+      "weight": "Peso",
+      "height": "Altura",
+      "bmi": "IMC",
+      "goal": "Objetivo",
+      "progress": "Progresso"
+    },
+    "tabs": {
+      "workouts": "Meus Treinos",
+      "diet": "Minha Dieta"
+    },
+    "workoutPlan": {
+      "title": "Plano de Treino",
+      "empty": {
+        "title": "Seu plano de treino personalizado aparecerá aqui.",
+        "action": "Clique em \"Gerar Plano de Treino\" para começar."
+      },
+      "generate": "Gerar Plano de Treino",
+      "generating": "Gerando Plano...",
+      "weekday": {
+        "monday": "Segunda",
+        "tuesday": "Terça",
+        "wednesday": "Quarta",
+        "thursday": "Quinta",
+        "friday": "Sexta",
+        "saturday": "Sábado",
+        "sunday": "Domingo",
+        "rest": "Descanso"
+      },
+      "exercise": {
+        "sets": "séries",
+        "reps": "reps",
+        "rest": "descanso"
+      }
+    },
+    "dietPlan": {
+      "title": "Plano Nutricional Diário",
+      "empty": {
+        "title": "Seu plano nutricional personalizado aparecerá aqui.",
+        "action": "Clique em \"Gerar Plano Alimentar\" para começar."
+      },
+      "generate": "Gerar Plano Alimentar",
+      "generating": "Gerando Plano...",
+      "meals": {
+        "breakfast": "Café da Manhã",
+        "lunch": "Almoço",
+        "dinner": "Jantar",
+        "snacks": "Lanches"
+      },
+      "nutrition": {
+        "calories": "Calorias",
+        "protein": "Proteína",
+        "carbs": "Carboidratos",
+        "fat": "Gordura"
+      }
+    }
+  }
+}
