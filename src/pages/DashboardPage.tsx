@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/components/ui/use-toast";
-import { Dumbbell, Plate, Loader2, LogOut } from "lucide-react";
+import { Dumbbell, Utensils, Loader2, LogOut } from "lucide-react";
 import { WorkoutPlan } from "@/components/WorkoutPlan";
 import { DietPlan } from "@/components/DietPlan";
 
@@ -95,7 +94,7 @@ const DashboardPage = () => {
                       My Workouts
                     </TabsTrigger>
                     <TabsTrigger value="diet" className="data-[state=active]:diet-highlight">
-                      <Plate className="h-4 w-4 mr-2" />
+                      <Utensils className="h-4 w-4 mr-2" />
                       My Diet
                     </TabsTrigger>
                   </TabsList>
@@ -131,7 +130,7 @@ const DashboardPage = () => {
                       <DietPlan />
                     ) : (
                       <div className="text-center py-12 text-muted-foreground">
-                        <Plate className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                        <Utensils className="h-12 w-12 mx-auto mb-4 opacity-50" />
                         <p>Your personalized diet plan will appear here.</p>
                         <p>Click "Generate Diet Plan" to get started.</p>
                       </div>

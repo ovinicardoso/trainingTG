@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plate } from "lucide-react";
+import { Utensils } from "lucide-react";
 
 export const DietPlan = () => {
   // Mock diet data - in a real app this would come from the AI service
@@ -87,7 +87,7 @@ export const DietPlan = () => {
       <Card>
         <CardContent className="pt-6">
           <div className="flex items-center mb-4">
-            <Plate className="h-5 w-5 mr-2 text-app-green" />
+            <Utensils className="h-5 w-5 mr-2 text-app-green" />
             <h3 className="text-lg font-medium">Daily Nutrition Plan</h3>
           </div>
           
