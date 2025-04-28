@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Inter', 'system-ui', 'sans-serif'],
+				heading: ['Montserrat', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,7 +66,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Custom colors
+				'app-black': '#000000',
+				'app-red': '#FF0000',
+				'app-green': '#00FF00',
+				'app-bg': '#111111',
+				'app-text': '#FFFFFF',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +95,31 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						boxShadow: '0 0 2px rgba(255, 255, 255, 0.2)' 
+					},
+					'50%': { 
+						boxShadow: '0 0 15px rgba(255, 255, 255, 0.5)' 
+					},
+				},
+				'slide-in': {
+					'0%': { 
+						transform: 'translateY(20px)',
+						opacity: '0' 
+					},
+					'100%': { 
+						transform: 'translateY(0)',
+						opacity: '1' 
+					},
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s infinite',
+				'slide-in': 'slide-in 0.3s forwards'
 			}
 		}
 	},
