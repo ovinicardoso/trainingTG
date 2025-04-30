@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 // This would be replaced with the actual Django backend URL in production
