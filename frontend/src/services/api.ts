@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 // This would be replaced with the actual Django backend URL in production
@@ -21,6 +22,53 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add interceptor for token refresh
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    
+    // If error is 401 and not already retrying
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      try {
+        // Try to refresh the token
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (!refreshToken) {
+          // No refresh token available, redirect to login
+          window.location.href = '/login';
+          return Promise.reject(error);
+        }
+        
+        const response = await axios.post(`${API_BASE_URL}/auth/token/refresh/`, {
+          refresh: refreshToken
+        });
+        
+        // Store the new access token
+        localStorage.setItem('token', response.data.access);
+        
+        // Update the authorization header
+        originalRequest.headers['Authorization'] = `Bearer ${response.data.access}`;
+        
+        // Retry the original request
+        return api(originalRequest);
+      } catch (refreshError) {
+        // If refresh fails, redirect to login
+        console.error("Error refreshing token:", refreshError);
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+    
     return Promise.reject(error);
   }
 );

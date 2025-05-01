@@ -16,6 +16,7 @@ const LoginPage = () => {
   const [activeTab, setActiveTab] = useState<string>("login");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
   const { login, register } = useAuth();
 
@@ -30,33 +31,46 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await login(email, password);
-    if (success) {
-      navigate("/dashboard");
+    setIsSubmitting(true);
+    
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate("/dashboard");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!name || !email || !password || !weight || !height || !age || !gender || !fitnessGoal || !workoutFrequency) {
       return;
     }
-
-    const userData = {
-      email,
-      password,
-      name,
-      weight: parseFloat(weight),
-      height: parseFloat(height),
-      age: parseInt(age),
-      gender: gender as 'male' | 'female' | 'other',
-      fitnessGoal: fitnessGoal as 'lose' | 'maintain' | 'gain',
-      workoutFrequency: parseInt(workoutFrequency),
-    };
-
-    const success = await register(userData);
-    if (success) {
-      navigate("/dashboard");
+    
+    setIsSubmitting(true);
+    
+    try {
+      const userData = {
+        email,
+        password,
+        name,
+        weight: parseFloat(weight),
+        height: parseFloat(height),
+        age: parseInt(age),
+        gender: gender as 'male' | 'female' | 'other',
+        fitnessGoal: fitnessGoal as 'lose' | 'maintain' | 'gain',
+        workoutFrequency: parseInt(workoutFrequency),
+      };
+      
+      const success = await register(userData);
+      if (success) {
+        navigate("/dashboard");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -116,7 +130,13 @@ const LoginPage = () => {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full workout-highlight">{t('auth.login')}</Button>
+                <Button 
+                  type="submit" 
+                  className="w-full workout-highlight" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? t('auth.loggingIn') : t('auth.login')}
+                </Button>
               </form>
             ) : (
               <form onSubmit={handleRegister} className="space-y-4">

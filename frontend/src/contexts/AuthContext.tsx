@@ -1,6 +1,8 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from "@/components/ui/use-toast";
+import { authAPI } from '@/services/api';
+import axios from 'axios';
 
 type User = {
   id: string;
@@ -53,63 +55,86 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { toast } = useToast();
-  
-  // Mock authentication for now
-  const mockUsers: User[] = [
-    {
-      id: '1',
-      email: 'test@example.com',
-      name: 'John Doe',
-      weight: 80,
-      height: 180,
-      age: 30,
-      gender: 'male',
-      fitnessGoal: 'gain',
-      workoutFrequency: 4
-    }
-  ];
 
   useEffect(() => {
     // Check if user is already logged in
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchUserData();
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await authAPI.getProfile();
+      
+      // Transform the backend user data to frontend user format
+      const userData = {
+        id: response.data.id,
+        email: response.data.email,
+        name: response.data.name,
+        weight: response.data.weight,
+        height: response.data.height,
+        age: response.data.age,
+        gender: response.data.gender,
+        fitnessGoal: response.data.fitness_goal,
+        workoutFrequency: response.data.workout_frequency
+      };
+      
+      setUser(userData);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const login = async (email: string, password: string) => {
     try {
       setLoading(true);
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const response = await authAPI.login(email, password);
       
-      const foundUser = mockUsers.find(u => u.email === email);
+      // Store tokens
+      localStorage.setItem('token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
       
-      if (foundUser) {
-        // In a real app, we would validate the password here
-        setUser(foundUser);
-        localStorage.setItem('user', JSON.stringify(foundUser));
+      // Fetch user data with the new token
+      await fetchUserData();
+      
+      toast({
+        title: "Login bem-sucedido!",
+        description: "Bem-vindo ao Shape Shift Genie",
+      });
+      
+      return true;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Login error:", error);
+        
+        let errorMessage = "E-mail ou senha inválidos";
+        
+        if (error.response?.status === 400) {
+          errorMessage = "Dados inválidos. Verifique os campos e tente novamente.";
+        } else if (error.response?.status === 401) {
+          errorMessage = "Credenciais inválidas. Verifique seu e-mail e senha.";
+        }
+        
         toast({
-          title: "Login successful!",
-          description: "Welcome to Shape Shift Genie",
+          variant: "destructive",
+          title: "Erro ao fazer login",
+          description: errorMessage,
         });
-        return true;
       } else {
         toast({
           variant: "destructive",
-          title: "Login failed",
-          description: "Invalid email or password",
+          title: "Erro ao fazer login",
+          description: "Ocorreu um erro. Por favor, tente novamente.",
         });
-        return false;
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      toast({
-        variant: "destructive",
-        title: "Login Error",
-        description: "Something went wrong. Please try again.",
-      });
       return false;
     } finally {
       setLoading(false);
@@ -119,41 +144,64 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const register = async (userData: RegisterData) => {
     try {
       setLoading(true);
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Check if user already exists
-      if (mockUsers.some(u => u.email === userData.email)) {
-        toast({
-          variant: "destructive",
-          title: "Registration failed",
-          description: "Email already exists",
-        });
-        return false;
-      }
-      
-      // Create new user
-      const newUser: User = {
-        id: Math.random().toString(36).substr(2, 9),
-        ...userData
+      // Transform frontend user data to backend format
+      const backendUserData = {
+        email: userData.email,
+        password: userData.password,
+        name: userData.name,
+        username: userData.email.split('@')[0], // Create a username from email
+        weight: userData.weight,
+        height: userData.height,
+        age: userData.age,
+        gender: userData.gender,
+        fitness_goal: userData.fitnessGoal,
+        workout_frequency: userData.workoutFrequency
       };
       
-      mockUsers.push(newUser);
-      setUser(newUser);
-      localStorage.setItem('user', JSON.stringify(newUser));
+      const response = await authAPI.register(backendUserData);
+      
+      // Store tokens if they are returned
+      if (response.data.access && response.data.refresh) {
+        localStorage.setItem('token', response.data.access);
+        localStorage.setItem('refresh_token', response.data.refresh);
+        
+        // Fetch user profile
+        await fetchUserData();
+      }
       
       toast({
-        title: "Registration successful!",
-        description: "Your account has been created",
+        title: "Registro bem-sucedido!",
+        description: "Sua conta foi criada com sucesso",
       });
+      
       return true;
     } catch (error) {
-      console.error("Registration error:", error);
-      toast({
-        variant: "destructive",
-        title: "Registration Error",
-        description: "Something went wrong. Please try again.",
-      });
+      if (axios.isAxiosError(error)) {
+        console.error("Registration error:", error);
+        
+        let errorMessage = "Erro ao registrar. Por favor, tente novamente.";
+        
+        if (error.response?.data?.email) {
+          errorMessage = "Este e-mail já está em uso.";
+        } else if (error.response?.data?.username) {
+          errorMessage = "Este nome de usuário já está em uso.";
+        } else if (error.response?.status === 400) {
+          errorMessage = "Dados inválidos. Verifique os campos e tente novamente.";
+        }
+        
+        toast({
+          variant: "destructive",
+          title: "Erro no registro",
+          description: errorMessage,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Erro no registro",
+          description: "Ocorreu um erro. Por favor, tente novamente.",
+        });
+      }
       return false;
     } finally {
       setLoading(false);
@@ -162,10 +210,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     toast({
-      title: "Logged out",
-      description: "You have been successfully logged out",
+      title: "Desconectado",
+      description: "Você foi desconectado com sucesso",
     });
   };
 
