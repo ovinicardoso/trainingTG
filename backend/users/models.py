@@ -25,7 +25,7 @@ class CustomUser(AbstractUser):
     fitness_goal = models.CharField(max_length=10, choices=GOAL_CHOICES, default='lose')
     workout_frequency = models.IntegerField(default=3)
 
-    # Adicione estas linhas para resolver conflitos
+    # Linhas para resolver conflitos
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_user_set',
