@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
     
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = "email"
     def validate(self, attrs):
         # The default JWT authentication uses username, but we want to use email
         email = attrs.get('email')
