@@ -25,14 +25,14 @@ const DashboardPage = () => {
       await new Promise(resolve => setTimeout(resolve, 3000));
       setHasGeneratedPlan(true);
       toast({
-        title: "Plan Generated!",
-        description: `Your personalized ${activeTab === "workouts" ? "workout" : "diet"} plan is ready.`,
+        title: "Plano gerado!",
+        description: `Seu plano de ${activeTab === "workouts" ? "workout" : "diet"} personalizado está pronto.`,
       });
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Generation Failed",
-        description: "Unable to generate plan. Please try again.",
+        title: "Falha na geração",
+        description: "Não foi possível gerar o plano. Tente novamente..",
       });
     } finally {
       setIsGenerating(false);
@@ -43,10 +43,10 @@ const DashboardPage = () => {
   const bmi = user ? (user.weight / Math.pow(user.height / 100, 2)).toFixed(1) : "0";
   const weightCategory = () => {
     const bmiValue = parseFloat(bmi);
-    if (bmiValue < 18.5) return "Underweight";
+    if (bmiValue < 18.5) return "Abaixo do peso";
     if (bmiValue < 25) return "Normal";
-    if (bmiValue < 30) return "Overweight";
-    return "Obese";
+    if (bmiValue < 30) return "Acima do peso";
+    return "Obeso(a)";
   };
 
   if (!user) {
@@ -59,7 +59,7 @@ const DashboardPage = () => {
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Dumbbell className="h-6 w-6 text-app-red" />
-            <h1 className="text-xl font-heading font-bold">Shape Shift Genie</h1>
+            <h1 className="text-xl font-heading font-bold">Training</h1>
           </div>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
@@ -81,9 +81,9 @@ const DashboardPage = () => {
           <div className="md:col-span-2 space-y-6">
             <Card className="border border-border">
               <CardHeader>
-                <CardTitle>Welcome back, {user.name}!</CardTitle>
+                <CardTitle>Bem-vindo de volta, {user.name}!</CardTitle>
                 <CardDescription>
-                  Here's your personalized fitness dashboard
+                  Aqui está seu painel fitness personalizado
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -91,11 +91,11 @@ const DashboardPage = () => {
                   <TabsList className="grid grid-cols-2 w-full">
                     <TabsTrigger value="workouts" className="data-[state=active]:workout-highlight">
                       <Dumbbell className="h-4 w-4 mr-2" />
-                      My Workouts
+                      Meus treinos
                     </TabsTrigger>
                     <TabsTrigger value="diet" className="data-[state=active]:diet-highlight">
                       <Utensils className="h-4 w-4 mr-2" />
-                      My Diet
+                      Minha dieta
                     </TabsTrigger>
                   </TabsList>
                   <div className="mt-6">
@@ -107,10 +107,10 @@ const DashboardPage = () => {
                       {isGenerating ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Generating your plan...
+                          Gerando seu plano...
                         </>
                       ) : (
-                        <>Generate {activeTab === "workouts" ? "Workout" : "Diet"} Plan</>
+                        <>Gerar Plano de {activeTab === "workouts" ? "Treino" : "Dieta"}</>
                       )}
                     </Button>
                   </div>
@@ -120,8 +120,8 @@ const DashboardPage = () => {
                     ) : (
                       <div className="text-center py-12 text-muted-foreground">
                         <Dumbbell className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        <p>Your personalized workout plan will appear here.</p>
-                        <p>Click "Generate Workout Plan" to get started.</p>
+                        <p>Seu plano de treino personalizado aparecerá aqui.</p>
+                        <p>Clique em "Gerar plano de treino" para começar.</p>
                       </div>
                     )}
                   </TabsContent>
@@ -131,8 +131,8 @@ const DashboardPage = () => {
                     ) : (
                       <div className="text-center py-12 text-muted-foreground">
                         <Utensils className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        <p>Your personalized diet plan will appear here.</p>
-                        <p>Click "Generate Diet Plan" to get started.</p>
+                        <p>Seu plano de dieta personalizado aparecerá aqui.</p>
+                        <p>Clique em "Gerar plano de dieta" para começar.</p>
                       </div>
                     )}
                   </TabsContent>
@@ -144,29 +144,29 @@ const DashboardPage = () => {
           <div className="space-y-6">
             <Card className="border border-border card-hover">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Profile Summary</CardTitle>
+                <CardTitle className="text-lg">Resumo do perfil</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Height</p>
+                    <p className="text-sm text-muted-foreground">Altura</p>
                     <p className="font-medium">{user.height} cm</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Weight</p>
+                    <p className="text-sm text-muted-foreground">Peso</p>
                     <p className="font-medium">{user.weight} kg</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">BMI</p>
+                    <p className="text-sm text-muted-foreground">IMC</p>
                     <p className="font-medium">{bmi} ({weightCategory()})</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Goal</p>
-                    <p className="font-medium capitalize">{user.fitnessGoal} Weight</p>
+                    <p className="text-sm text-muted-foreground">Meta</p>
+                    <p className="font-medium capitalize">{user.fitnessGoal} Peso</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Workout Frequency</p>
-                    <p className="font-medium">{user.workoutFrequency} days per week</p>
+                    <p className="text-sm text-muted-foreground">Frequência de treino</p>
+                    <p className="font-medium">{user.workoutFrequency} dias por semana</p>
                   </div>
                 </div>
               </CardContent>
@@ -174,27 +174,27 @@ const DashboardPage = () => {
 
             <Card className="border border-border card-hover">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Current Progress</CardTitle>
+                <CardTitle className="text-lg">Progresso Atual</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between mb-1">
-                      <p className="text-sm text-muted-foreground">Weekly Workouts</p>
+                      <p className="text-sm text-muted-foreground">Treinos semanais</p>
                       <p className="text-sm font-medium">2/{user.workoutFrequency}</p>
                     </div>
                     <Progress value={33} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between mb-1">
-                      <p className="text-sm text-muted-foreground">Calories Target</p>
+                      <p className="text-sm text-muted-foreground">Meta de calorias</p>
                       <p className="text-sm font-medium">1200/2000</p>
                     </div>
                     <Progress value={60} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between mb-1">
-                      <p className="text-sm text-muted-foreground">Body Fat %</p>
+                      <p className="text-sm text-muted-foreground">Gordura Corporal %</p>
                       <p className="text-sm font-medium">18%</p>
                     </div>
                     <Progress value={18} className="h-2" />
@@ -205,8 +205,8 @@ const DashboardPage = () => {
 
             <div className="p-4 bg-muted rounded-lg">
               <p className="text-xs text-center text-muted-foreground">
-                AI-generated recommendations don't replace qualified professionals.
-                Always consult with a healthcare provider before starting any new fitness or diet program.
+              Recomendações geradas por IA não substituem profissionais qualificados.
+              Sempre consulte um profissional de saúde antes de iniciar qualquer novo programa de condicionamento físico ou dieta.
               </p>
             </div>
           </div>
