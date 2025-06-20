@@ -1,1 +1,0 @@
-1. Instalar o pdpPlumber: pip install langchain-community pdfplumber django
